@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swift eSports Store | متجر سويفت للألعاب والخدمات</title>
+    <!-- خط Cairo الاحترافي -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-main: #0a0c10;
+            --bg-card: #141822;
+            --bg-header: #0f121a;
+            --bg-input: #090b0e;
+            --accent-cyan: #00d2ff;
+            --accent-blue: #0088cc;
+            --accent-green: #25d366;
+            --accent-red: #ff4757;
+            --text-white: #ffffff;
+            --text-muted: #94a3b8;
+            --border-color: #222938;
+            --border-hover: #00d2ff;
+            --shadow-glow: rgba(0, 210, 255, 0.15);
+            --font-main: 'Cairo', sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-main);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-white);
+            line-height: 1.6;
+            padding-bottom: 120px;
+            overflow-x: hidden;
+        }
+
+        /* Header Navigation */
+        header {
+            background-color: var(--bg-header);
+            border-bottom: 2px solid var(--accent-cyan);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--accent-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo-title span {
+            color: var(--text-white);
+        }
+
+        .user-auth-status {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-welcome {
+            font-size: 0.9rem;
+            color: var(--text-white);
+            font-weight: 600;
+        }
+
+        .btn-auth-nav {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: 0.3s;
+        }
+
+        .btn-auth-nav:hover {
+            opacity: 0.9;
+        }
+
+        /* Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            border-right: 5px solid var(--accent-cyan);
+            padding-right: 15px;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-white);
+        }
+
+        /* Admin Control Panel */
+        .admin-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .admin-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-blue));
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 18px;
+        }
+
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        .form-control {
+            background-color: var(--bg-input);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: var(--text-white);
+            font-size: 0.95rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px var(--shadow-glow);
+        }
+
+        input[type="file"].form-control {
+            padding: 9px;
+            cursor: pointer;
+        }
+
+        textarea.form-control {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Buttons */
+        .btn-submit {
+            background: linear-gradient(135deg, var(--accent-blue), var(--accent-cyan));
+            color: #000;
+            font-weight: 800;
+            font-size: 1rem;
+            border: none;
+            border-radius: 10px;
+            padding: 14px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px var(--shadow-glow);
+        }
+
+        .btn-order {
+            background: linear-gradient(135deg, #10b981, var(--accent-green));
+            color: #000;
+            font-weight: 800;
+            font-size: 1rem;
+            border: none;
+            border-radius: 10px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .btn-order:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-delete {
+            background-color: transparent;
+            color: var(--accent-red);
+            border: 1px solid var(--accent-red);
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-radius: 8px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-delete:hover {
+            background-color: var(--accent-red);
+            color: var(--text-white);
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .product-card:hover {
+            border-color: var(--border-hover);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px var(--shadow-glow);
+        }
+
+        .badge-discount {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--accent-red);
+            color: var(--text-white);
+            font-size: 0.8rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            border-radius: 20px;
+            z-index: 10;
+        }
+
+        .product-img-wrapper {
+            width: 100%;
+            height: 210px;
+            position: relative;
+            background-color: #000;
+            overflow: hidden;
+        }
+
+        .product-img-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .product-card:hover .product-img-wrapper img {
+            transform: scale(1.05);
+        }
+
+        .product-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-white);
+        }
+
+        .product-description {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            white-space: pre-line;
+        }
+
+        .price-container {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 15px;
+            background-color: var(--bg-input);
+            padding: 8px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .price-current {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: var(--accent-cyan);
+        }
+
+        .price-old {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        /* Order Notice Box */
+        .order-notice-box {
+            background-color: rgba(0, 210, 255, 0.08);
+            border: 1px dashed var(--accent-cyan);
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 0.82rem;
+            color: #cbd5e1;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .order-notice-box strong {
+            color: var(--accent-cyan);
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        /* Custom Modal System */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-cyan);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .auth-toggle-text {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .auth-toggle-btn {
+            color: var(--accent-cyan);
+            cursor: pointer;
+            font-weight: 700;
+            text-decoration: underline;
+        }
+
+        .otp-notice {
+            background: rgba(37, 211, 102, 0.1);
+            border: 1px solid var(--accent-green);
+            color: var(--accent-green);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* Floating WhatsApp & Footer */
+        .whatsapp-btn-float {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: linear-gradient(135deg, #25d366, #128c7e);
+            color: white;
+            padding: 12px 22px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 999;
+        }
+
+        footer {
+            background-color: var(--bg-header);
+            border-top: 1px solid var(--border-color);
+            padding: 25px 20px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-top: 60px;
+        }
+
+        footer strong {
+            color: var(--accent-cyan);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- الهيدر والتحكم بالحساب -->
+    <header>
+        <div class="header-container">
+            <div class="logo-title">
+                Swift <span>eSports</span>
+            </div>
+            <div class="user-auth-status" id="authStatusContainer">
+                <!-- سيتم ملء حالة المستخدم تلقائياً -->
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+        
+        <!-- لوحة التحكم لإضافة منتج -->
+        <div class="admin-card">
+            <div class="section-header">
+                <h2>إضافة منتج جديد (لوحة التحكم)</h2>
+            </div>
+            <form id="storeAddProductForm">
+                <div class="form-grid">
+                    
+                    <div class="form-group form-group-full">
+                        <label for="inputTitle">اسم المنتج / الخدمة:</label>
+                        <input type="text" id="inputTitle" class="form-control" placeholder="مثال: خدمة فتح الألوان والحزم النادرة | MW3" required>
+                    </div>
+
+                    <div class="form-group form-group-full">
+                        <label for="inputImageFile">اختر صورة المنتج (من المعرض / الملفات):</label>
+                        <input type="file" id="inputImageFile" class="form-control" accept="image/*" required>
+                    </div>
+
+                    <div class="form-group form-group-full">
+                        <label for="inputDescription">وصف المنتج الكامل:</label>
+                        <textarea id="inputDescription" class="form-control" placeholder="اكتب التفاصيل والمميزات هنا..." required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputPrice">السعر الأساسي (بالريال):</label>
+                        <input type="number" id="inputPrice" class="form-control" placeholder="150" min="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="inputSalePrice">السعر بعد التخفيض (اختياري):</label>
+                        <input type="number" id="inputSalePrice" class="form-control" placeholder="99">
+                    </div>
+
+                    <div class="form-group form-group-full">
+                        <label for="inputOptions">خيارات المنتج (افصل بين كل خيار بفاصلة ,):</label>
+                        <input type="text" id="inputOptions" class="form-control" placeholder="مثال: حزمة الألوان النادرة, تفعيل اللوكر الكامل, حزمة مخصصة">
+                    </div>
+
+                </div>
+
+                <button type="submit" class="btn-submit">
+                    ➕ نشر المنتج في المتجر
+                </button>
+            </form>
+        </div>
+
+        <!-- عرض المنتجات -->
+        <div class="section-header">
+            <h2>المنتجات والخدمات المتاحة</h2>
+        </div>
+
+        <div class="products-grid" id="productsDisplayContainer">
+            <!-- المنتجات تُعرض هنا -->
+        </div>
+
+    </div>
+
+    <!-- نافذة تسجيل الدخول / إنشاء حساب / التحقق بـ OTP (Modal) -->
+    <div class="modal-overlay" id="authModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">تسجيل الدخول</h3>
+                <button class="close-modal" onclick="closeAuthModal()">&times;</button>
+            </div>
+            
+            <!-- المرحلة 1: إدخال البيانات -->
+            <form id="authFormStep1">
+                <div class="form-group" id="nameGroup" style="display: none; margin-bottom: 12px;">
+                    <label>الاسم الكامل:</label>
+                    <input type="text" id="authName" class="form-control" placeholder="أدخل اسمك الكامل">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label>البريد الإلكتروني:</label>
+                    <input type="email" id="authEmail" class="form-control" placeholder="example@gmail.com" required>
+                </div>
+
+                <div class="form-group" id="phoneGroup" style="display: none; margin-bottom: 12px;">
+                    <label>رقم الجوال:</label>
+                    <input type="tel" id="authPhone" class="form-control" placeholder="05xxxxxxxx">
+                </div>
+
+                <button type="submit" class="btn-submit" id="authSubmitBtn">إرسال رمز التحقق</button>
+
+                <div class="auth-toggle-text">
+                    <span id="authToggleQuestion">ليس لديك حساب؟</span>
+                    <span class="auth-toggle-btn" id="authToggleBtn" onclick="toggleAuthMode()">إنشاء حساب جديد</span>
+                </div>
+            </form>
+
+            <!-- المرحلة 2: إدخال رمز التحقق OTP -->
+            <form id="authFormStep2" style="display: none;">
+                <div class="otp-notice">
+                    📩 تم إرسال رمز التحقق المؤلف من 6 أرقام إلى بريدك/جوالك.
+                </div>
+
+                <div class="form-group" style="margin-bottom: 15px;">
+                    <label>أدخل رمز التحقق (OTP):</label>
+                    <input type="text" id="otpInput" class="form-control" style="text-align: center; letter-spacing: 5px; font-weight: bold; font-size: 1.2rem;" placeholder="123456" maxlength="6" required>
+                </div>
+
+                <button type="submit" class="btn-submit">تأكيد الرمز والدخول</button>
+                <button type="button" class="btn-delete" onclick="resetToStep1()">إعادة الإرسال / تعديل البيانات</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- زر الواتساب العائم -->
+    <a href="https://wa.me/966576213135" class="whatsapp-btn-float" target="_blank">
+        💬 الدعم المباشر: 0576213135
+    </a>
+
+    <!-- الفوتر -->
+    <footer>
+        <p>جميع الحقوق محفوظة © <strong>Swift eSports Store</strong> | خدمة العملاء: 0576213135</p>
+    </footer>
+
+    <!-- الجافاسكريبت والمنطق البرمجي -->
+    <script>
+        // المنتجات الافتراضية
+        const initialDefaultProducts = [
+            {
+                id: Date.now(),
+                title: "خدمة فتح الألوان والحزم النادرة | MW3",
+                image: "https://generativelanguage.googleapis.com/v1beta/files/watermarked_img_7504720592072365151.jpg",
+                description: "تفعيل مباشر للألوان والحزم النادرة على حسابك بأمان عالي وسرعة في التنفيذ لجميع المنصات.",
+                price: 150,
+                salePrice: 99,
+                optionsList: ["حزمة الألوان النادرة", "تفعيل اللوكر الكامل", "حزمة مخصصة"]
+            }
+        ];
+
+        let storeProducts = JSON.parse(localStorage.getItem('swift_store_data')) || initialDefaultProducts;
+        let currentUser = JSON.parse(localStorage.getItem('swift_logged_user')) || null;
+        let isSignUpMode = false;
+        
+        // متغيرات مؤقتة لرمز التحقق
+        let generatedOTP = null;
+        let tempUserData = null;
+
+        function updateHeaderAuth() {
+            const container = document.getElementById('authStatusContainer');
+            if (currentUser) {
+                container.innerHTML = `
+                    <span class="user-welcome">مرحباً، ${currentUser.name || currentUser.email}</span>
+                    <button class="btn-auth-nav" onclick="logoutUser()">تسجيل الخروج</button>
+                `;
+            } else {
+                container.innerHTML = `
+                    <button class="btn-auth-nav" onclick="openAuthModal(false)">تسجيل الدخول</button>
+                    <button class="btn-auth-nav" onclick="openAuthModal(true)">إنشاء حساب</button>
+                `;
+            }
+        }
+
+        function openAuthModal(signup = false) {
+            isSignUpMode = signup;
+            resetToStep1();
+            const modal = document.getElementById('authModal');
+            const title = document.getElementById('modalTitle');
+            const nameGroup = document.getElementById('nameGroup');
+            const phoneGroup = document.getElementById('phoneGroup');
+            const question = document.getElementById('authToggleQuestion');
+            const toggleBtn = document.getElementById('authToggleBtn');
+
+            if (isSignUpMode) {
+                title.innerText = "إنشاء حساب جديد";
+                nameGroup.style.display = "flex";
+                phoneGroup.style.display = "flex";
+                document.getElementById('authName').required = true;
+                document.getElementById('authPhone').required = true;
+                question.innerText = "لديك حساب بالفعل؟";
+                toggleBtn.innerText = "تسجيل الدخول";
+            } else {
+                title.innerText = "تسجيل الدخول";
+                nameGroup.style.display = "none";
+                phoneGroup.style.display = "none";
+                document.getElementById('authName').required = false;
+                document.getElementById('authPhone').required = false;
+                question.innerText = "ليس لديك حساب؟";
+                toggleBtn.innerText = "إنشاء حساب جديد";
+            }
+
+            modal.classList.add('active');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+
+        function toggleAuthMode() {
+            openAuthModal(!isSignUpMode);
+        }
+
+        function resetToStep1() {
+            document.getElementById('authFormStep1').style.display = 'block';
+            document.getElementById('authFormStep2').style.display = 'none';
+            document.getElementById('otpInput').value = '';
+        }
+
+        // إرسال رمز التحقق (Step 1)
+        document.getElementById('authFormStep1').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('authEmail').value.trim();
+            const name = isSignUpMode ? document.getElementById('authName').value.trim() : email.split('@')[0];
+            const phone = isSignUpMode ? document.getElementById('authPhone').value.trim() : "غير محدد";
+
+            // إعداد بيانات المستخدم المؤقتة وتوليد رمز 6 أرقام
+            tempUserData = { name, email, phone };
+            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+
+            // تنبيه الرمز المحاكي للمستخدم (Simulated OTP SMS/Email)
+            alert(`📩 [رسالة النظام]: رمز التحقق الخاص بك هو: (${generatedOTP})`);
+
+            // للانتقال إلى المرحلة الثانية
+            document.getElementById('authFormStep1').style.display = 'none';
+            document.getElementById('authFormStep2').style.display = 'block';
+        });
+
+        // التأكد من رمز التحقق (Step 2)
+        document.getElementById('authFormStep2').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const userEnteredOTP = document.getElementById('otpInput').value.trim();
+
+            if (userEnteredOTP === generatedOTP) {
+                currentUser = tempUserData;
+                localStorage.setItem('swift_logged_user', JSON.stringify(currentUser));
+                updateHeaderAuth();
+                closeAuthModal();
+                alert("تم التحقق بنجاح وتأكيد الحساب!");
+            } else {
+                alert("❌ رمز التحقق غير صحيح! حاول مرة أخرى.");
+            }
+        });
+
+        function logoutUser() {
+            localStorage.removeItem('swift_logged_user');
+            currentUser = null;
+            updateHeaderAuth();
+            renderStoreProducts();
+        }
+
+        function renderStoreProducts() {
+            const container = document.getElementById('productsDisplayContainer');
+            container.innerHTML = '';
+
+            if (storeProducts.length === 0) {
+                container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: var(--text-muted);">لا توجد منتجات حالياً.</div>`;
+                return;
+            }
+
+            storeProducts.forEach((product, idx) => {
+                const isDiscounted = product.salePrice && Number(product.salePrice) < Number(product.price);
+                const displayPrice = isDiscounted ? product.salePrice : product.price;
+
+                let optionsDropdownHTML = '';
+                if (product.optionsList && product.optionsList.length > 0) {
+                    optionsDropdownHTML = `
+                        <div style="margin-bottom: 10px;">
+                            <span style="font-size: 0.85rem; color: var(--text-muted);">اختر نوع الخدمة / الحزمة:</span>
+                            <select id="select-opt-${idx}" class="form-control" style="margin-top: 4px;">
+                                ${product.optionsList.map(opt => `<option value="${opt.trim()}">${opt.trim()}</option>`).join('')}
+                            </select>
+                        </div>
+                    `;
+                }
+
+                container.innerHTML += `
+                    <div class="product-card">
+                        ${isDiscounted ? `<div class="badge-discount">تخفيض خاص</div>` : ''}
+                        <div class="product-img-wrapper">
+                            <img src="${product.image}" alt="${product.title}">
+                        </div>
+                        <div class="product-content">
+                            <h3 class="product-title">${product.title}</h3>
+                            <p class="product-description">${product.description}</p>
+                            
+                            <div class="price-container">
+                                <span class="price-current">${displayPrice} <span style="font-size: 0.85rem;">ر.س</span></span>
+                                ${isDiscounted ? `<span class="price-old">${product.price} ر.س</span>` : ''}
+                            </div>
+
+                            ${optionsDropdownHTML}
+
+                            <div style="margin-bottom: 10px;">
+                                <span style="font-size: 0.85rem; color: var(--text-muted);">ملاحظاتك أو بيانات الحساب:</span>
+                                <textarea id="note-txt-${idx}" class="form-control" style="min-height: 60px; margin-top: 4px;" placeholder="اكتب ملاحظاتك هنا..."></textarea>
+                            </div>
+
+                            <div class="order-notice-box">
+                                <strong>⚠️ ملاحظة هامة قبل الطلب:</strong>
+                                مدة الرد والتنفيذ تتراوح بين 1 ساعة إلى 48 ساعة كحد أقصى حسب الضغط.
+                            </div>
+
+                            <button class="btn-order" onclick="processWhatsAppOrder(${idx})">
+                                🛒 طلب الخدمة عبر الواتساب
+                            </button>
+                            <button class="btn-delete" onclick="removeProductFromStore(${idx})">
+                                🗑️ حذف المنتج
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        document.getElementById('storeAddProductForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('inputTitle').value;
+            const fileInput = document.getElementById('inputImageFile');
+            const description = document.getElementById('inputDescription').value;
+            const price = document.getElementById('inputPrice').value;
+            const salePrice = document.getElementById('inputSalePrice').value;
+            const optionsRaw = document.getElementById('inputOptions').value;
+
+            const optionsList = optionsRaw ? optionsRaw.split(',') : [];
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const newProduct = {
+                        id: Date.now(),
+                        title: title,
+                        image: e.target.result,
+                        description: description,
+                        price: price,
+                        salePrice: salePrice,
+                        optionsList: optionsList
+                    };
+
+                    storeProducts.push(newProduct);
+                    saveAndRefreshStore();
+                    document.getElementById('storeAddProductForm').reset();
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            }
+        });
+
+        function removeProductFromStore(index) {
+            if (confirm("هل أنت تأكد من حذف هذا المنتج؟")) {
+                storeProducts.splice(index, 1);
+                saveAndRefreshStore();
+            }
+        }
+
+        function saveAndRefreshStore() {
+            localStorage.setItem('swift_store_data', JSON.stringify(storeProducts));
+            renderStoreProducts();
+        }
+
+        function generateOrderID() {
+            const randomNum = Math.floor(100000 + Math.random() * 900000);
+            return `#SE-${randomNum}`;
+        }
+
+        function processWhatsAppOrder(index) {
+            if (!currentUser) {
+                alert("عذراً! يجب عليك تسجيل الدخول وإكمال التحقق بالرمز أولاً للتمكن من إتمام الطلب.");
+                openAuthModal(false);
+                return;
+            }
+
+            const product = storeProducts[index];
+            const optElement = document.getElementById(`select-opt-${index}`);
+            const noteElement = document.getElementById(`note-txt-${index}`);
+
+            const selectedOption = optElement ? optElement.value : 'افتراضي';
+            const customerNote = noteElement && noteElement.value.trim() !== '' ? noteElement.value.trim() : 'لا توجد ملاحظات إضافية';
+            const finalPrice = (product.salePrice && Number(product.salePrice) < Number(product.price)) ? product.salePrice : product.price;
+            
+            const orderID = generateOrderID();
+
+            const whatsappMessage = `مرحباً Swift eSports، أريد طلب الخدمة التالية:
+----------------------------------
+🆔 *رقم الطلب:* ${orderID}
+📌 *المنتج:* ${product.title}
+⚙️ *الخيار المحدد:* ${selectedOption}
+💰 *السعر:* ${finalPrice} ريال سعودي
+
+👤 *بيانات العميل (حساب موثق بالرمز):*
+- *الاسم:* ${currentUser.name}
+- *الإيميل:* ${currentUser.email}
+- *رقم الجوال:* ${currentUser.phone}
+
+📝 *الملاحظات / بيانات الحساب:*
+${customerNote}
+
+⏱️ *علمت أن مدة التنفيذ والرد بين ساعة إلى 48 ساعة.*
+----------------------------------`;
+
+            const phoneNumber = "966576213135";
+            const targetUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+            window.open(targetUrl, '_blank');
+        }
+
+        updateHeaderAuth();
+        renderStoreProducts();
+    </script>
+</body>
+</html>
