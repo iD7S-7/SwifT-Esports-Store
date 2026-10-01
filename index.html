@@ -1,0 +1,1032 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">متجر المنتجات الرقمية | كول أوف ديوتي</title>
+    <!-- Google Fonts & FontAwesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #0f1117;
+            --card-bg: #181b23;
+            --primary-color: #ff4757;
+            --primary-hover: #ff6b81;
+            --accent-color: #2ed573;
+            --text-main: #ffffff;
+            --text-muted: #a0a5b5;
+            --border-color: #2a2e3d;
+            --input-bg: #12141c;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        /* Navbar */
+        header {
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .brand img {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .brand h1 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-admin-toggle {
+            background-color: #2a2e3d;
+            color: #ffd700;
+            border: 1px solid #ffd700;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-admin-toggle:hover {
+            background-color: #ffd700;
+            color: #000;
+        }
+
+        .cart-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            transition: background 0.3s;
+        }
+
+        .cart-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .cart-count {
+            background: white;
+            color: var(--primary-color);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Banner Hero */
+        .hero {
+            background: linear-gradient(180deg, rgba(24, 27, 35, 0.8) 0%, rgba(15, 17, 23, 1) 100%), url('https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            text-align: center;
+            padding: 3rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero h2 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .hero p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+            flex: 1;
+            width: 100%;
+        }
+
+        /* Admin Panel Drawer/Modal */
+        .admin-panel {
+            display: none;
+            background: var(--card-bg);
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .admin-panel.active {
+            display: block;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .admin-header h3 {
+            color: #ffd700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: none;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 6px;
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            background: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .btn-submit {
+            background-color: var(--accent-color);
+            color: black;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Products Grid */
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s, border-color 0.3s;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+
+        .product-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .product-body {
+            padding: 1.2rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .product-badge {
+            align-self: flex-start;
+            background: rgba(46, 213, 115, 0.15);
+            color: var(--accent-color);
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-desc {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            margin-bottom: 1rem;
+            flex: 1;
+        }
+
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 800;
+            color: var(--accent-color);
+        }
+
+        .btn-add-cart {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.6rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+
+        .btn-add-cart:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .admin-card-actions {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 5px;
+            z-index: 10;
+        }
+
+        .btn-card-edit, .btn-card-delete {
+            background: rgba(0, 0, 0, 0.7);
+            border: none;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-card-edit:hover { background: #ffa500; }
+        .btn-card-delete:hover { background: #ff4757; }
+
+        /* Modal Checkout */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
+            padding: 1.5rem;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.8rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cart-summary {
+            margin: 1.5rem 0;
+            background: var(--input-bg);
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-row.total {
+            border-top: 1px solid var(--border-color);
+            padding-top: 0.5rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: var(--accent-color);
+        }
+
+        /* Payment Methods Buttons */
+        .payment-methods {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+
+        .btn-pay {
+            width: 100%;
+            padding: 0.9rem;
+            border-radius: 8px;
+            border: none;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-apple-pay {
+            background-color: #000;
+            color: #fff;
+            border: 1px solid #333;
+        }
+
+        .btn-card-pay {
+            background-color: #2e86de;
+            color: #fff;
+        }
+
+        .btn-bank-pay {
+            background-color: #10ac84;
+            color: #fff;
+        }
+
+        .bank-details-box {
+            background: var(--input-bg);
+            border: 1px dashed var(--accent-color);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .bank-details-box.active {
+            display: block;
+        }
+
+        footer {
+            background-color: var(--card-bg);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-muted);
+            margin-top: auto;
+        }
+
+        @media (max-width: 600px) {
+            .form-row { grid-template-columns: 1fr; }
+            .hero h2 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <header>
+        <div class="navbar">
+            <a href="#" class="brand">
+                <img id="store-logo" src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=100&q=80" alt="Logo">
+                <h1 id="store-name">متجر كود الرقمي</h1>
+            </a>
+            <div class="nav-controls">
+                <!-- زر اللوحة الخاص بالمالك فقط -->
+                <button class="btn-admin-toggle" onclick="toggleAdminPanel()">
+                    <i class="fa-solid fa-user-shield"></i> لوحة التحكم
+                </button>
+                
+                <button class="cart-btn" onclick="openCartModal()">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>السلة</span>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="hero">
+        <h2 id="banner-title">أسرع وأمن متجر لحسابات كول أوف ديوتي</h2>
+        <p id="banner-desc">تسليم فورى للخدمات والحسابات مع ضمان كامل وتوفير طرق الدفع المحلية والعالمية</p>
+    </section>
+
+    <!-- Main Container -->
+    <div class="main-container">
+
+        <!-- Admin Control Panel (Hidden by default or toggled) -->
+        <div class="admin-panel" id="admin-panel">
+            <div class="admin-header">
+                <h3><i class="fa-solid fa-sliders"></i> لوحة تحكم المالك (إدارة المتجر)</h3>
+                <button class="close-modal" onclick="toggleAdminPanel()">&times;</button>
+            </div>
+
+            <div class="admin-tabs">
+                <button class="tab-btn active" onclick="switchTab('products-tab')">إدارة المنتجات</button>
+                <button class="tab-btn" onclick="switchTab('bank-tab')">بيانات التحويل البنكي</button>
+                <button class="tab-btn" onclick="switchTab('design-tab')">تعديل معلومات وتصميم المتجر</button>
+            </div>
+
+            <!-- Tab 1: Manage Products -->
+            <div class="tab-content active" id="products-tab">
+                <h4 style="margin-bottom: 1rem;" id="form-product-title">إضافة منتج جديد</h4>
+                <form id="product-form" onsubmit="saveProduct(event)">
+                    <input type="hidden" id="prod-id">
+                    <div class="form-group">
+                        <label>اسم المنتج</label>
+                        <input type="text" id="prod-title" placeholder="مثال: حساب كول أوف ديوتي مكس" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>السعر (ر.س)</label>
+                            <input type="number" id="prod-price" placeholder="150" required>
+                        </div>
+                        <div class="form-group">
+                            <label>رابط الصورة</label>
+                            <input type="url" id="prod-img" placeholder="https://..." required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>وصف المنتج والخصائص</label>
+                        <textarea id="prod-desc" rows="3" placeholder="أكتب تفاصيل الحساب والضمان..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit"><i class="fa-solid fa-plus"></i> حفظ المنتج</button>
+                </form>
+            </div>
+
+            <!-- Tab 2: Bank Details -->
+            <div class="tab-content" id="bank-tab">
+                <h4 style="margin-bottom: 1rem;">إعدادات الحساب البنكي الخاص بك لاستلام الأموال</h4>
+                <form onsubmit="saveBankSettings(event)">
+                    <div class="form-group">
+                        <label>اسم البنك</label>
+                        <input type="text" id="bank-name-input" placeholder="مثال: مصرف الراجحي" required>
+                    </div>
+                    <div class="form-group">
+                        <label>اسم صاحب الحساب (كما هو في البنك)</label>
+                        <input type="text" id="bank-owner-input" placeholder="الاسم الرباعي" required>
+                    </div>
+                    <div class="form-group">
+                        <label>رقم الآيبان (IBAN)</label>
+                        <input type="text" id="bank-iban-input" placeholder="SA00 0000 0000 0000 0000 0000" required>
+                    </div>
+                    <button type="submit" class="btn-submit"><i class="fa-solid fa-floppy-disk"></i> حفظ بيانات البنك</button>
+                </form>
+            </div>
+
+            <!-- Tab 3: Store Information & Colors -->
+            <div class="tab-content" id="design-tab">
+                <h4 style="margin-bottom: 1rem;">تعديل معلومات المتجر والمظهر</h4>
+                <form onsubmit="saveStoreSettings(event)">
+                    <div class="form-group">
+                        <label>اسم المتجر</label>
+                        <input type="text" id="store-name-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>عنوان البانر الرئيسي</label>
+                        <input type="text" id="banner-title-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label>وصف البانر</label>
+                        <textarea id="banner-desc-input" rows="2" required></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>رابط الشعار (Logo)</label>
+                            <input type="url" id="store-logo-input" required>
+                        </div>
+                        <div class="form-group">
+                            <label>اللون الرئيسي للمتجر</label>
+                            <input type="color" id="store-color-input" style="height: 45px; cursor: pointer;">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-submit"><i class="fa-solid fa-paintbrush"></i> حفظ التغييرات والمظهر</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Store Products Section -->
+        <div class="section-title">
+            <i class="fa-solid fa-gamepad" style="color: var(--primary-color);"></i>
+            <span>المنتجات المتاحة</span>
+        </div>
+
+        <div class="products-grid" id="products-grid">
+            <!-- ستظهر المنتجات هنا تلقائياً -->
+        </div>
+
+    </div>
+
+    <!-- Modal: Cart & Checkout -->
+    <div class="modal-overlay" id="cart-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-bag-shopping"></i> سلة الشراء والدفع</h3>
+                <button class="close-modal" onclick="closeCartModal()">&times;</button>
+            </div>
+
+            <div id="cart-items-container">
+                <!-- عناصر السلة -->
+            </div>
+
+            <div class="cart-summary">
+                <div class="summary-row">
+                    <span>المجموع الفرعي:</span>
+                    <span id="cart-subtotal">0 ر.س</span>
+                </div>
+                <div class="summary-row total">
+                    <span>الإجمالي الكلي:</span>
+                    <span id="cart-total">0 ر.س</span>
+                </div>
+            </div>
+
+            <h4 style="margin-bottom: 0.8rem;">اختر طريقة الدفع:</h4>
+            <div class="payment-methods">
+                <!-- Apple Pay Button -->
+                <button class="btn-pay btn-apple-pay" onclick="processApplePay()">
+                    <i class="fa-brands fa-apple" style="font-size: 1.3rem;"></i>
+                    <span>ادفع بواسطة Apple Pay</span>
+                </button>
+
+                <!-- Card Payment Button -->
+                <button class="btn-pay btn-card-pay" onclick="processCardPay()">
+                    <i class="fa-solid fa-credit-card"></i>
+                    <span>بطاقة مدى / فيزا / ماستركارد</span>
+                </button>
+
+                <!-- Bank Transfer Button -->
+                <button class="btn-pay btn-bank-pay" onclick="toggleBankDetails()">
+                    <i class="fa-solid fa-building-columns"></i>
+                    <span>تحويل بنكي مباشر</span>
+                </button>
+            </div>
+
+            <!-- Bank Details Box -->
+            <div class="bank-details-box" id="bank-details-box">
+                <h5 style="color: var(--accent-color); margin-bottom: 0.5rem;"><i class="fa-solid fa-circle-info"></i> معلومات الحساب للتحويل:</h5>
+                <p><strong>البنك:</strong> <span id="display-bank-name">مصرف الراجحي</span></p>
+                <p><strong>صاحب الحساب:</strong> <span id="display-bank-owner">متجر كود</span></p>
+                <p><strong>رقم الآيبان:</strong> <span id="display-bank-iban" style="word-break: break-all; color: #ffd700;">SA0000000000000000000000</span></p>
+                <small style="display: block; margin-top: 0.5rem; color: var(--text-muted);">* بعد التحويل يرجى إرسال الإيصال للدعم الفني لتفعيل الحساب فوراً.</small>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>جميع الحقوق محفوظة &copy; <span id="footer-store-name">متجر كود الرقمي</span> 2026</p>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Data State Store
+        let storeConfig = {
+            name: "متجر كود الرقمي",
+            logo: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=100&q=80",
+            bannerTitle: "أسرع وأمن متجر لحسابات كول أوف ديوتي",
+            bannerDesc: "تسليم فورى للخدمات والحسابات مع ضمان كامل وتوفير طرق الدفع المحلية والعالمية",
+            primaryColor: "#ff4757",
+            bankName: "مصرف الراجحي",
+            bankOwner: "متجر الألعاب الرقمي",
+            bankIban: "SA12 8000 0000 6080 1010 9999"
+        };
+
+        let products = [
+            {
+                id: 1,
+                title: "حساب كول أوف ديوتي مكس (MW3 & Warzone)",
+                price: 180,
+                img: "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&q=80",
+                desc: "حساب شخصي مميز يحتوي على تمويهات نادرة (مكس)، أسلحة لفل ماكس، وأجنحة مفتوحة بالكامل. ربط سوني وأكس بوكس وPC جاهز."
+            }
+        ];
+
+        let cart = [];
+
+        // Load Initial Data
+        window.onload = function() {
+            loadFromLocalStorage();
+            applyStoreConfig();
+            renderProducts();
+            updateCartUI();
+        };
+
+        // Toggle Admin Panel View
+        function toggleAdminPanel() {
+            const panel = document.getElementById('admin-panel');
+            panel.classList.toggle('active');
+            if(panel.classList.contains('active')) {
+                panel.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Tab Switching in Admin Panel
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Apply Config to DOM
+        function applyStoreConfig() {
+            document.getElementById('store-name').innerText = storeConfig.name;
+            document.getElementById('footer-store-name').innerText = storeConfig.name;
+            document.getElementById('store-logo').src = storeConfig.logo;
+            document.getElementById('banner-title').innerText = storeConfig.bannerTitle;
+            document.getElementById('banner-desc').innerText = storeConfig.bannerDesc;
+            document.getElementById('page-title').innerText = storeConfig.name;
+
+            // Update Root Color
+            document.documentElement.style.setProperty('--primary-color', storeConfig.primaryColor);
+
+            // Update Bank Displays
+            document.getElementById('display-bank-name').innerText = storeConfig.bankName;
+            document.getElementById('display-bank-owner').innerText = storeConfig.bankOwner;
+            document.getElementById('display-bank-iban').innerText = storeConfig.bankIban;
+
+            // Fill Admin Inputs
+            document.getElementById('store-name-input').value = storeConfig.name;
+            document.getElementById('banner-title-input').value = storeConfig.bannerTitle;
+            document.getElementById('banner-desc-input').value = storeConfig.bannerDesc;
+            document.getElementById('store-logo-input').value = storeConfig.logo;
+            document.getElementById('store-color-input').value = storeConfig.primaryColor;
+
+            document.getElementById('bank-name-input').value = storeConfig.bankName;
+            document.getElementById('bank-owner-input').value = storeConfig.bankOwner;
+            document.getElementById('bank-iban-input').value = storeConfig.bankIban;
+        }
+
+        // Save Store Info & Styling
+        function saveStoreSettings(e) {
+            e.preventDefault();
+            storeConfig.name = document.getElementById('store-name-input').value;
+            storeConfig.bannerTitle = document.getElementById('banner-title-input').value;
+            storeConfig.bannerDesc = document.getElementById('banner-desc-input').value;
+            storeConfig.logo = document.getElementById('store-logo-input').value;
+            storeConfig.primaryColor = document.getElementById('store-color-input').value;
+
+            saveToLocalStorage();
+            applyStoreConfig();
+            alert('تم حفظ إعدادات ومعلومات المتجر بنجاح!');
+        }
+
+        // Save Bank Details
+        function saveBankSettings(e) {
+            e.preventDefault();
+            storeConfig.bankName = document.getElementById('bank-name-input').value;
+            storeConfig.bankOwner = document.getElementById('bank-owner-input').value;
+            storeConfig.bankIban = document.getElementById('bank-iban-input').value;
+
+            saveToLocalStorage();
+            applyStoreConfig();
+            alert('تم حفظ بيانات الحساب البنكي والآيبان بنجاح!');
+        }
+
+        // Render Products List
+        function renderProducts() {
+            const grid = document.getElementById('products-grid');
+            grid.innerHTML = '';
+
+            products.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="admin-card-actions">
+                        <button class="btn-card-edit" title="تعديل" onclick="editProduct(${p.id})"><i class="fa-solid fa-pen"></i></button>
+                        <button class="btn-card-delete" title="حذف" onclick="deleteProduct(${p.id})"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                    <img src="${p.img}" alt="${p.title}" class="product-img">
+                    <div class="product-body">
+                        <span class="product-badge"><i class="fa-solid fa-shield-halved"></i> تسليم فوري وضمان</span>
+                        <h3 class="product-title">${p.title}</h3>
+                        <p class="product-desc">${p.desc}</p>
+                        <div class="product-footer">
+                            <span class="product-price">${p.price} ر.س</span>
+                            <button class="btn-add-cart" onclick="addToCart(${p.id})">
+                                <i class="fa-solid fa-cart-plus"></i> إضافة للسلة
+                            </button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Add or Update Product
+        function saveProduct(e) {
+            e.preventDefault();
+            const id = document.getElementById('prod-id').value;
+            const title = document.getElementById('prod-title').value;
+            const price = parseFloat(document.getElementById('prod-price').value);
+            const img = document.getElementById('prod-img').value;
+            const desc = document.getElementById('prod-desc').value;
+
+            if (id) {
+                // Update
+                const index = products.findIndex(p => p.id == id);
+                if (index !== -1) {
+                    products[index] = { id: parseInt(id), title, price, img, desc };
+                }
+            } else {
+                // Create
+                const newProduct = {
+                    id: Date.now(),
+                    title,
+                    price,
+                    img,
+                    desc
+                };
+                products.push(newProduct);
+            }
+
+            // Reset form
+            document.getElementById('product-form').reset();
+            document.getElementById('prod-id').value = '';
+            document.getElementById('form-product-title').innerText = 'إضافة منتج جديد';
+
+            saveToLocalStorage();
+            renderProducts();
+            alert('تم حفظ المنتج بنجاح!');
+        }
+
+        // Edit Product
+        function editProduct(id) {
+            const p = products.find(item => item.id === id);
+            if (!p) return;
+
+            document.getElementById('prod-id').value = p.id;
+            document.getElementById('prod-title').value = p.title;
+            document.getElementById('prod-price').value = p.price;
+            document.getElementById('prod-img').value = p.img;
+            document.getElementById('prod-desc').value = p.desc;
+
+            document.getElementById('form-product-title').innerText = 'تعديل المنتج';
+            
+            // Open panel and tab
+            document.getElementById('admin-panel').classList.add('active');
+            switchTab('products-tab');
+            document.getElementById('admin-panel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Delete Product
+        function deleteProduct(id) {
+            if (confirm('هل أنت تأكد من رغبتك في حذف هذا المنتج؟')) {
+                products = products.filter(p => p.id !== id);
+                saveToLocalStorage();
+                renderProducts();
+            }
+        }
+
+        // Cart Actions
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                cart.push(product);
+                updateCartUI();
+                openCartModal();
+            }
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-count').innerText = cart.length;
+
+            const container = document.getElementById('cart-items-container');
+            container.innerHTML = '';
+
+            let total = 0;
+
+            if (cart.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: var(--text-muted); padding: 1rem;">السلة فارغة حالياً</p>';
+            } else {
+                cart.forEach((item, index) => {
+                    total += item.price;
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'cart-item';
+                    itemEl.innerHTML = `
+                        <div>
+                            <strong>${item.title}</strong>
+                            <div style="color: var(--accent-color); font-weight: bold; font-size: 0.9rem;">${item.price} ر.س</div>
+                        </div>
+                        <button onclick="removeFromCart(${index})" style="background: none; border: none; color: #ff4757; cursor: pointer;">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    `;
+                    container.appendChild(itemEl);
+                });
+            }
+
+            document.getElementById('cart-subtotal').innerText = `${total} ر.س`;
+            document.getElementById('cart-total').innerText = `${total} ر.س`;
+        }
+
+        function openCartModal() {
+            document.getElementById('cart-modal').classList.add('active');
+        }
+
+        function closeCartModal() {
+            document.getElementById('cart-modal').classList.remove('active');
+            document.getElementById('bank-details-box').classList.remove('active');
+        }
+
+        // Payment Simulations
+        function processApplePay() {
+            if (cart.length === 0) return alert('السلة فارغة!');
+            const total = document.getElementById('cart-total').innerText;
+            
+            // Check if ApplePaySession exists
+            if (window.ApplePaySession && ApplePaySession.canMakePayments()) {
+                alert(`سيتم فتح نافذة Apple Pay لسداد مبلغ ${total}.`);
+            } else {
+                alert(`[محاكاة Apple Pay]\nطلب دفع لمبلغ: ${total}\n\nملاحظة: لربط الدفع الحقيقي وتلقي الأموال في حسابك، يتم ربط المتجر ببوابة مثل Moyasar أو Paylink.`);
+            }
+        }
+
+        function processCardPay() {
+            if (cart.length === 0) return alert('السلة فارغة!');
+            const total = document.getElementById('cart-total').innerText;
+            alert(`[محاكاة بوابات مدى/فيزا]\nجاري توجيهك لبوابة الدفع الآمنة لسداد ${total}.`);
+        }
+
+        function toggleBankDetails() {
+            if (cart.length === 0) return alert('السلة فارغة!');
+            const box = document.getElementById('bank-details-box');
+            box.classList.toggle('active');
+        }
+
+        // LocalStorage Helpers
+        function saveToLocalStorage() {
+            localStorage.setItem('my_store_config', JSON.stringify(storeConfig));
+            localStorage.setItem('my_store_products', JSON.stringify(products));
+        }
+
+        function loadFromLocalStorage() {
+            const savedConfig = localStorage.getItem('my_store_config');
+            const savedProducts = localStorage.getItem('my_store_products');
+
+            if (savedConfig) storeConfig = JSON.parse(savedConfig);
+            if (savedProducts) products = JSON.parse(savedProducts);
+        }
+    </script>
+</body>
+</html>
